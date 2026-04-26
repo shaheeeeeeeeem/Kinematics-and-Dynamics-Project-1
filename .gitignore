@@ -2,4 +2,3 @@
 imgui.ini
 build/
 release/
-*.dll

@@ -5,18 +5,20 @@ $releaseRoot = Join-Path $projectRoot "release"
 $packageRoot = Join-Path $releaseRoot "Mechanism-Simulator-Windows"
 $zipPath = Join-Path $releaseRoot "Mechanism-Simulator-Windows.zip"
 $docsPdf = Join-Path $projectRoot "docs\Kinematics___Dynamics_of_Machinery_Project.pdf"
+$dllFiles = Get-ChildItem -LiteralPath $projectRoot -Filter *.dll -File | Sort-Object Name
+$optionalFiles = @(
+    (Join-Path $projectRoot "imgui.ini")
+) | Where-Object { Test-Path $_ }
 
 $requiredFiles = @(
     (Join-Path $projectRoot "build\fourbar.exe"),
     (Join-Path $projectRoot "build\slidercrank.exe"),
-    (Join-Path $projectRoot "libgcc_s_seh-1.dll"),
-    (Join-Path $projectRoot "libsfml-graphics-3.dll"),
-    (Join-Path $projectRoot "libsfml-system-3.dll"),
-    (Join-Path $projectRoot "libsfml-window-3.dll"),
-    (Join-Path $projectRoot "libstdc++-6.dll"),
-    (Join-Path $projectRoot "libwinpthread-1.dll"),
     $docsPdf
 )
+
+if ($dllFiles.Count -eq 0) {
+    throw "No DLL files were found in the project root: $projectRoot"
+}
 
 foreach ($file in $requiredFiles) {
     if (-not (Test-Path $file)) {
@@ -33,14 +35,11 @@ New-Item -ItemType Directory -Force -Path $packageRoot | Out-Null
 $copyList = @(
     (Join-Path $projectRoot "build\fourbar.exe"),
     (Join-Path $projectRoot "build\slidercrank.exe"),
-    (Join-Path $projectRoot "libgcc_s_seh-1.dll"),
-    (Join-Path $projectRoot "libsfml-graphics-3.dll"),
-    (Join-Path $projectRoot "libsfml-system-3.dll"),
-    (Join-Path $projectRoot "libsfml-window-3.dll"),
-    (Join-Path $projectRoot "libstdc++-6.dll"),
-    (Join-Path $projectRoot "libwinpthread-1.dll"),
     $docsPdf
 )
+
+$copyList += $dllFiles.FullName
+$copyList += $optionalFiles
 
 foreach ($file in $copyList) {
     Copy-Item -LiteralPath $file -Destination $packageRoot -Force
