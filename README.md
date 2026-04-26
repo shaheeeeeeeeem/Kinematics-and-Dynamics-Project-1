@@ -4,7 +4,7 @@ This project is a Windows desktop mechanism simulator built with C++, SFML, ImGu
 
 - A four-bar mechanism
 - A slider-crank mechanism
-- A launcher window that lets the user choose which simulator to open
+- A launcher window that lets the user choose which simulator to open during local/source use
 
 The repository also includes the project report PDF and a packaged Windows zip for people who only want to run the executables.
 
@@ -168,7 +168,7 @@ If you only want to run the project:
 1. Download the zip from the `release/` folder or from a GitHub Release.
 2. Extract it completely.
 3. Open the extracted folder.
-4. Run `launcher.exe`.
+4. Run `fourbar.exe` or `slidercrank.exe` directly.
 
 The zip also includes the project PDF so users can read the report without cloning the repository.
 
@@ -196,7 +196,6 @@ It creates:
 
 That zip contains:
 
-- `launcher.exe`
 - `fourbar.exe`
 - `slidercrank.exe`
 - Required DLL files
@@ -229,5 +228,5 @@ Then upload `release/Mechanism-Simulator-Windows.zip` as a release asset on GitH
 ## Notes
 
 - The code is currently Windows-specific because it uses `ShellExecuteA` and a hardcoded Windows font path.
-- The launcher expects `fourbar.exe` and `slidercrank.exe` to be in the same extracted folder at runtime.
+- The source project still includes `launcher.exe`, but the downloadable zip excludes it because users should run the simulators directly.
 - If you share only the `.exe` files without the required DLLs, the application may fail to start on another machine.
